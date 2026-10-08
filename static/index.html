@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>القرآن الکریم - 3D ماڈرن پورٹل</title>
+    <!-- گوگل نوری نستعلیق اور عربی فونٹس -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #e0e5ec 0%, #b8c6db 100%);
+            --card-bg: #ffffff;
+            --text-main: #2d3748;
+            --shadow-3d: 9px 9px 16px rgba(163, 177, 198, 0.6), -9px -9px 16px rgba(255, 255, 255, 0.8);
+            --shadow-inset: inset 3px 3px 6px rgba(163, 177, 198, 0.4), inset -3px -3px 6px rgba(255, 255, 255, 0.9);
+        }
+
+        body {
+            font-family: 'Noto Nastaliq Urdu', 'Tahoma', sans-serif;
+            background: var(--bg-gradient);
+            margin: 0;
+            padding: 25px;
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: #f0f4f8;
+            color: #2d3748;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: var(--shadow-3d);
+            margin-bottom: 35px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 36px;
+            font-family: 'Amiri', serif;
+            color: #1a202c;
+        }
+
+        .header p {
+            margin: 0;
+            color: #718096;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 750px;
+            margin: 0 auto 25px auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: var(--shadow-3d);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        h2 {
+            color: #2d3748;
+            font-size: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        input {
+            flex: 1;
+            padding: 14px 18px;
+            font-size: 16px;
+            border-radius: 12px;
+            border: none;
+            outline: none;
+            background: #f7fafc;
+            box-shadow: var(--shadow-inset);
+            color: #2d3748;
+            font-family: 'Noto Nastaliq Urdu', sans-serif;
+        }
+
+        button {
+            padding: 14px 24px;
+            font-size: 16px;
+            background: #edf2f7;
+            color: #2d3748;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: 'Noto Nastaliq Urdu', sans-serif;
+            box-shadow: var(--shadow-3d);
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+
+        button:hover {
+            background: #e2e8f0;
+            transform: translateY(-2px);
+        }
+
+        .quran-box {
+            margin-top: 20px;
+            padding: 25px;
+            background: #f8fafc;
+            border-radius: 15px;
+            box-shadow: var(--shadow-inset);
+            display: none;
+            border: 1px solid #e2e8f0;
+        }
+
+        .arabic-text {
+            font-family: 'Amiri', serif;
+            font-size: 28px;
+            line-height: 2.8;
+            color: #1a202c;
+            margin-bottom: 20px;
+            direction: rtl;
+            text-align: right;
+        }
+
+        .info-text {
+            font-size: 15px;
+            color: #4a5568;
+            margin-bottom: 15px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        audio {
+            width: 100%;
+            margin-top: 15px;
+            border-radius: 10px;
+            outline: none;
+        }
+
+        .error-msg {
+            color: #e53e3e;
+            margin-top: 12px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .ayah-line {
+            margin-bottom: 18px;
+            border-bottom: 1px dashed #cbd5e0;
+            padding-bottom: 14px;
+            text-align: right;
+            direction: rtl;
+        }
+
+        .ayah-number {
+            color: #319795;
+            font-family: 'Amiri', serif;
+            font-size: 20px;
+            font-weight: bold;
+            display: inline;
+            white-space: nowrap;
+            margin-right: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>القرآن الکریم</h1>
+        <p>آیت، سورت اور پارہ کا متن اور تلاوت (3D گرے وائٹ ڈیزائن)</p>
+    </div>
+
+    <!-- 1. آیت سرچ سیکشن -->
+    <div class="container">
+        <h2>آیت مبارکہ تلاش کریں</h2>
+        <div class="input-group">
+            <input type="text" id="ayahKey" placeholder="مثلاً: 2:255">
+            <button onclick="fetchAyahData()">تلاش کریں</button>
+        </div>
+        <div id="ayahError" class="error-msg"></div>
+        <div id="ayahBox" class="quran-box" style="text-align: center;">
+            <div id="ayahInfo" class="info-text"></div>
+            <div id="ayahText" class="arabic-text" style="text-align: center;"></div>
+            <audio id="ayahAudio" controls></audio>
+        </div>
+    </div>
+
+    <!-- 2. سورت سرچ سیکشن -->
+    <div class="container">
+        <h2>پوری سورت تلاش کریں</h2>
+        <div class="input-group">
+            <input type="number" id="surahNum" placeholder="مثلاً: 36 (سورہ یٰسین)">
+            <button onclick="fetchSurahData()">سورت دیکھیں</button>
+        </div>
+        <div id="surahError" class="error-msg"></div>
+        <div id="surahBox" class="quran-box">
+            <div id="surahInfo" class="info-text"></div>
+            <div id="surahText" style="max-height: 450px; overflow-y: auto; padding: 10px;"></div>
+            <audio id="surahAudio" controls></audio>
+        </div>
+    </div>
+
+    <!-- 3. پارہ سرچ سیکشن -->
+    <div class="container">
+        <h2>پارہ (Juz) تلاش کریں</h2>
+        <div class="input-group">
+            <input type="number" id="juzNum" placeholder="مثلاً: 1 (پارہ 1)">
+            <button onclick="fetchJuzData()">پارہ دیکھیں</button>
+        </div>
+        <div id="juzError" class="error-msg"></div>
+        <div id="juzBox" class="quran-box">
+            <div id="juzInfo" class="info-text"></div>
+            <div id="juzText" style="max-height: 450px; overflow-y: auto; padding: 10px;"></div>
+            <audio id="juzAudio" controls></audio>
+        </div>
+    </div>
+
+    <script>
+        // 1. آیت اور آڈیو فیچ کرنے کا فنکشن
+        async function fetchAyahData() {
+            let key = document.getElementById('ayahKey').value.trim();
+            let errorBox = document.getElementById('ayahError');
+            let box = document.getElementById('ayahBox');
+            
+            errorBox.innerText = "";
+            box.style.display = "none";
+
+            if (!key) {
+                errorBox.innerText = "براہ کرم آیت کا نمبر درج کریں (مثلاً 2:255)";
+                return;
+            }
+
+            try {
+                let textRes = await fetch(`/quran/ayah/${key}`);
+                let textData = await textRes.json();
+                let audioRes = await fetch(`/quran/ayah/audio/${key}`);
+                let audioData = await audioRes.json();
+
+                if (textData.code === 200 && audioData.code === 200) {
+                    let ayah = textData.data;
+                    document.getElementById('ayahInfo').innerText = `سورت: ${ayah.surah.englishName} (${ayah.surah.name}) | پاره: ${ayah.juz} | آیت نمبر: ${ayah.numberInSurah}`;
+                    document.getElementById('ayahText').innerText = ayah.text + " ۝";
+                    document.getElementById('ayahAudio').src = audioData.data.audio;
+                    box.style.display = "block";
+                } else {
+                    errorBox.innerText = "مطلوبہ آیت نہیں ملی۔ درست فارمیٹ استعمال کریں!";
+                }
+            } catch (e) {
+                errorBox.innerText = "سرور سے رابطہ کرنے میں مسئلہ پیش آیا!";
+            }
+        }
+
+        // 2. سورت اور اس کی آڈیو فیچ کرنے کا فنکشن
+        async function fetchSurahData() {
+            let num = document.getElementById('surahNum').value.trim();
+            let errorBox = document.getElementById('surahError');
+            let box = document.getElementById('surahBox');
+            
+            errorBox.innerText = "";
+            box.style.display = "none";
+
+            if (!num) {
+                errorBox.innerText = "براہ کرم سورت کا نمبر درج کریں (مثلاً 36)";
+                return;
+            }
+
+            try {
+                let textRes = await fetch(`/quran/surah/${num}`);
+                let textData = await textRes.json();
+
+                if (textData.code === 200) {
+                    let surah = textData.data;
+                    
+                    let fullHtml = "";
+                    surah.ayahs.forEach(ayah => {
+                        fullHtml += `<div class="ayah-line arabic-text">
+                            ${ayah.text} <span class="ayah-number">﴿${ayah.numberInSurah}﴾</span>
+                        </div>`;
+                    });
+
+                    document.getElementById('surahInfo').innerText = `سورت: ${surah.englishName} (${surah.name}) - کل آیات: ${surah.numberOfAyahs} - قسم: ${surah.revelationType}`;
+                    
+                    let textContainer = document.getElementById('surahText');
+                    textContainer.innerHTML = fullHtml;
+
+                    // سورت کی آڈیو کے لیے پہلی آیت کا ڈائریکٹ CDN لنک سیٹ کرنا
+                    let firstAyahGlobalNumber = surah.ayahs[0].number;
+                    document.getElementById('surahAudio').src = `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${firstAyahGlobalNumber}.mp3`;
+
+                    box.style.display = "block";
+                } else {
+                    errorBox.innerText = "مطلوبہ سورت نہیں ملی۔ 1 سے 114 تک کا نمبر درج کریں!";
+                }
+            } catch (e) {
+                errorBox.innerText = "سرور سے رابطہ کرنے میں مسئلہ پیش آیا!";
+            }
+        }
+
+        // 3. پارہ اور اس کی آڈیو فیچ کرنے کا فنکشن
+        async function fetchJuzData() {
+            let num = document.getElementById('juzNum').value.trim();
+            let errorBox = document.getElementById('juzError');
+            let box = document.getElementById('juzBox');
+            
+            errorBox.innerText = "";
+            box.style.display = "none";
+
+            if (!num) {
+                errorBox.innerText = "براہ کرم پارے کا نمبر درج کریں (مثلاً 1)";
+                return;
+            }
+
+            try {
+                let textRes = await fetch(`/quran/juz/${num}`);
+                let textData = await textRes.json();
+
+                if (textData.code === 200) {
+                    let juz = textData.data;
+                    
+                    let fullHtml = "";
+                    juz.ayahs.forEach(ayah => {
+                        fullHtml += `<div class="ayah-line arabic-text">
+                            ${ayah.text} <span class="ayah-number">﴿${ayah.numberInSurah}﴾ <small style="font-size:12px; color:#718096;">[${ayah.surah.name}]</small></span>
+                        </div>`;
+                    });
+
+                    document.getElementById('juzInfo').innerText = `پارہ نمبر: ${num} - کل آیات: ${juz.ayahs.length}`;
+                    
+                    let textContainer = document.getElementById('juzText');
+                    textContainer.innerHTML = fullHtml;
+
+                    // پارے کی آڈیو کے لیے پہلی آیت کا ڈائریکٹ CDN لنک سیٹ کرنا
+                    let firstJuzAyahGlobalNumber = juz.ayahs[0].number;
+                    document.getElementById('juzAudio').src = `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${firstJuzAyahGlobalNumber}.mp3`;
+
+                    box.style.display = "block";
+                } else {
+                    errorBox.innerText = "مطلوبہ پارہ نہیں ملا۔ 1 سے 30 تک کا نمبر درج کریں!";
+                }
+            } catch (e) {
+                errorBox.innerText = "سرور سے رابطہ کرنے میں مسئلہ پیش آیا!";
+            }
+        }
+    </script>
+
+</body>
+</html>
