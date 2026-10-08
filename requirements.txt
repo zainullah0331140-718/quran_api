@@ -1,5 +1,4 @@
 fastapi
 uvicorn
-pydantic
-mysql-connector-python
+httpx
 jinja2
